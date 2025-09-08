@@ -54,11 +54,29 @@ function LoginPage() {
 
 
 
+  const getStoredPassword = (role) => {
+
+    const stored = localStorage.getItem(`${role}_password`);
+
+    if (stored) return stored;
+
+
+
+    if (role === "operator") return "opp123@";
+
+    if (role === "approver") return "app123@";
+
+    if (role === "user") return "use123@";
+
+    return null;
+
+  };
+
+
+
   const handleLogin = (e) => {
 
     e.preventDefault();
-
-    const correctPassword = "password123";
 
 
 
@@ -72,6 +90,28 @@ function LoginPage() {
 
 
 
+    let role = "";
+
+    if (userId.startsWith("Opp123")) role = "operator";
+
+    else if (userId.startsWith("App123")) role = "approver";
+
+    else if (userId.startsWith("Use123")) role = "user";
+
+    else {
+
+      alert("Invalid User ID. Please use Opp123..., App123..., or Use123...");
+
+      return;
+
+    }
+
+
+
+    const correctPassword = getStoredPassword(role);
+
+
+
     if (password !== correctPassword) {
 
       alert("Incorrect password. Please try again or reset your password.");
@@ -82,23 +122,11 @@ function LoginPage() {
 
 
 
-    if (userId.startsWith("Opp123")) {
+    if (role === "operator") navigate("/operator-home");
 
-      navigate("/operator-home");
+    if (role === "approver") navigate("/approver-home");
 
-    } else if (userId.startsWith("App123")) {
-
-      navigate("/approver-home");
-
-    } else if (userId.startsWith("Use123")) {
-
-      navigate("/user-home");
-
-    } else {
-
-      alert("Invalid User ID. Please use Opp123..., App123..., or Use123...");
-
-    }
+    if (role === "user") navigate("/user-home");
 
   };
 
