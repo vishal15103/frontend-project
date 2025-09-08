@@ -1,50 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-import "./LoginPage.css";
-
-import "../App.css";
+import "./ForgotPasswordPage.css";
 
 
 
 function ForgotPasswordPage() {
 
-  const [backgroundIndex, setBackgroundIndex] = useState(0);
+  const [userId, setUserId] = useState("");
 
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
 
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [modalContent, setModalContent] = useState(null);
-
-
-
-  const backgrounds = [
-
-    "/images/bg_1.jpeg",
-
-    "/images/bg2.jpeg",
-
-    "/images/bg3.jpeg",
-
-    "/images/bg_4.jpeg"
-
-  ];
-
-
-
-  useEffect(() => {
-
-    const interval = setInterval(() => {
-
-      setBackgroundIndex((prev) => (prev + 1) % backgrounds.length);
-
-    }, 4000);
-
-    return () => clearInterval(interval);
-
-  }, [backgrounds.length]);
+  const navigate = useNavigate();
 
 
 
@@ -52,63 +22,65 @@ function ForgotPasswordPage() {
 
     e.preventDefault();
 
-    alert("Password reset successful!");
-
-  };
 
 
+    if (!userId) {
 
-  const openModal = (type) => {
+      alert("Please enter your User ID.");
 
-    let title = "";
-
-    let desc = "";
-
-
-
-    switch (type) {
-
-      case "help":
-
-        title = "Help";
-
-        desc = "Get quick assistance for login issues, navigation help, and common FAQs.";
-
-        break;
-
-      case "contact":
-
-        title = "Contact Us";
-
-        desc = "You can reach Standard Chartered via email at support@sc.com or call 1800-123-456.";
-
-        break;
-
-      case "support":
-
-        title = "Support";
-
-        desc = "Our support team is available 24/7 to resolve your banking queries and provide assistance.";
-
-        break;
-
-      case "about":
-
-        title = "About Us";
-
-        desc = "Standard Chartered is a leading international bank, committed to driving commerce and prosperity through our unique diversity.";
-
-        break;
-
-      default:
-
-        break;
+      return;
 
     }
 
 
 
-    setModalContent({ title, desc });
+    let role = "";
+
+    if (userId.startsWith("Opp123")) role = "operator";
+
+    else if (userId.startsWith("App123")) role = "approver";
+
+    else if (userId.startsWith("Use123")) role = "user";
+
+    else {
+
+      alert("Invalid User ID. Please use Opp123..., App123..., or Use123...");
+
+      return;
+
+    }
+
+
+
+    if (newPassword !== confirmPassword) {
+
+      alert("Passwords do not match.");
+
+      return;
+
+    }
+
+
+
+    if (newPassword.trim().length < 6) {
+
+      alert("Password should be at least 6 characters long.");
+
+      return;
+
+    }
+
+
+
+    // Store new password in localStorage
+
+    localStorage.setItem(`${role}_password`, newPassword);
+
+
+
+    alert("Password reset successful! You can now log in with your new password.");
+
+    navigate("/"); // redirect to login page
 
   };
 
@@ -116,185 +88,71 @@ function ForgotPasswordPage() {
 
   return (
 
-    <div
+    <div className="forgot-password-container">
 
-      className="login-container"
+      <h2>Reset Your Password</h2>
 
-      style={{ backgroundImage: `url(${backgrounds[backgroundIndex]})` }}
+      <form onSubmit={handleReset}>
 
-    >
+        <input
 
-      {/* Header */}
+          type="text"
 
-      <header className="header">
+          placeholder="Enter User ID"
 
-        <div className="logo">Standard Chartered</div>
+          value={userId}
 
-        <nav>
+          onChange={(e) => setUserId(e.target.value)}
 
-          <a onClick={() => openModal("help")}>Help</a>
+          required
 
-          <a onClick={() => openModal("contact")}>Contact Us</a>
+        />
 
-          <a onClick={() => openModal("support")}>Support</a>
+        <input
 
-          <a onClick={() => openModal("about")}>About Us</a>
+          type="password"
 
-        </nav>
+          placeholder="Enter New Password"
 
-      </header>
+          value={newPassword}
 
+          onChange={(e) => setNewPassword(e.target.value)}
 
+          required
 
-      <div className="main-content" style={{ justifyContent: "center" }}>
+        />
 
-        {/* Motto Section */}
+        <input
 
-        <div className="welcome-section">
+          type="password"
 
-          <h1>Reset Your Password</h1>
+          placeholder="Confirm New Password"
 
-          <p>
+          value={confirmPassword}
 
-            Securely reset your password and regain access to your Standard Chartered account.
+          onChange={(e) => setConfirmPassword(e.target.value)}
 
-          </p>
+          required
 
+        />
 
+        <button type="submit" className="reset-btn">
 
-          <div className="mottos">
+          Reset Password
 
-            <div className="motto-card">
+        </button>
 
-              <img src="/icons/secure.png" alt="Secure" /> Secure Transactions
+      </form>
 
-            </div>
+      <p>
 
-            <div className="motto-card">
+        <a onClick={() => navigate("/")} className="link-btn">
 
-              <img src="/icons/global.png" alt="Global" /> Global Access
+          Back to Login
 
-            </div>
+        </a>
 
-            <div className="motto-card">
-
-              <img src="/icons/fast.png" alt="Fast" /> Fast & Reliable
-
-            </div>
-
-            <div className="motto-card">
-
-              <img src="/icons/trust.png" alt="Trust" /> Trusted Banking Partner
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-
-        {/* Reset Form */}
-
-        <div className="login-box">
-
-          <h2>Forgot Password</h2>
-
-          <form onSubmit={handleReset}>
-
-            <input type="text" placeholder="User ID" required />
-
-
-
-            <div className="password-container">
-
-              <input
-
-                type={passwordVisible ? "text" : "password"}
-
-                placeholder="New Password"
-
-                required
-
-              />
-
-              <span
-
-                className="toggle-password"
-
-                onClick={() => setPasswordVisible(!passwordVisible)}
-
-              >
-
-                {passwordVisible ? <FaEyeSlash /> : <FaEye />}
-
-              </span>
-
-            </div>
-
-
-
-            <div className="password-container">
-
-              <input
-
-                type={confirmPasswordVisible ? "text" : "password"}
-
-                placeholder="Confirm Password"
-
-                required
-
-              />
-
-              <span
-
-                className="toggle-password"
-
-                onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
-
-              >
-
-                {confirmPasswordVisible ? <FaEyeSlash /> : <FaEye />}
-
-              </span>
-
-            </div>
-
-
-
-            <button className="login-btn" type="submit">
-
-              Reset Password
-
-            </button>
-
-          </form>
-
-        </div>
-
-      </div>
-
-
-
-      {/* Modal */}
-
-      {modalContent && (
-
-        <div className="modal-overlay">
-
-          <div className="modal">
-
-            <h2>{modalContent.title}</h2>
-
-            <p>{modalContent.desc}</p>
-
-            <button onClick={() => setModalContent(null)}>Close</button>
-
-          </div>
-
-        </div>
-
-      )}
+      </p>
 
     </div>
 
