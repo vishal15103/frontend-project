@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import "./LoginPage.css";
 
-import "../App.css"; // import global styles
+import "../App.css";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
@@ -17,6 +17,8 @@ function LoginPage() {
   const [backgroundIndex, setBackgroundIndex] = useState(0);
 
   const [modalContent, setModalContent] = useState(null);
+
+  const [userId, setUserId] = useState("");
 
   const navigate = useNavigate();
 
@@ -54,7 +56,25 @@ function LoginPage() {
 
     e.preventDefault();
 
-    navigate("/home");
+
+
+    if (userId.startsWith("Opp123")) {
+
+      navigate("/operator-home");
+
+    } else if (userId.startsWith("App123")) {
+
+      navigate("/approver-home");
+
+    } else if (userId.startsWith("Use123")) {
+
+      navigate("/user-home");
+
+    } else {
+
+      alert("Invalid User ID. Please use Opp123..., App123..., or Use123...");
+
+    }
 
   };
 
@@ -126,8 +146,6 @@ function LoginPage() {
 
     >
 
-      {/* Header */}
-
       <header className="header">
 
         <div className="logo">Standard Chartered</div>
@@ -148,11 +166,7 @@ function LoginPage() {
 
 
 
-      {/* Main Content */}
-
       <div className="main-content">
-
-        {/* Left Section */}
 
         <div className="welcome-section">
 
@@ -200,39 +214,25 @@ function LoginPage() {
 
 
 
-        {/* Right Section (Login Box) */}
-
         <div className="login-box">
 
           <h2>User Login</h2>
 
           <form onSubmit={handleLogin}>
 
-            <div className="radio-options">
+            <input
 
-              <label>
+              type="text"
 
-                <input type="radio" name="loginType" defaultChecked /> Operator Login
+              placeholder="Enter User ID"
 
-              </label>
+              value={userId}
 
-              <label>
+              onChange={(e) => setUserId(e.target.value)}
 
-                <input type="radio" name="loginType" /> Approver Login
+              required
 
-              </label>
-
-              <label>
-
-                <input type="radio" name="loginType" /> User Login
-
-              </label>
-
-            </div>
-
-
-
-            <input type="text" placeholder="Username" required />
+            />
 
 
 
@@ -274,8 +274,6 @@ function LoginPage() {
 
 
 
-          {/* New Links */}
-
           <div className="extra-links">
 
             <p>
@@ -290,7 +288,13 @@ function LoginPage() {
 
             <p>
 
-              <a onClick={() => navigate("/forgot-password")} className="link-btn">
+              <a
+
+                onClick={() => navigate("/forgot-password")}
+
+                className="link-btn"
+
+              >
 
                 Forgot Password?
 
@@ -305,8 +309,6 @@ function LoginPage() {
       </div>
 
 
-
-      {/* Modal */}
 
       {modalContent && (
 
