@@ -20,6 +20,8 @@ function LoginPage() {
 
   const [userId, setUserId] = useState("");
 
+  const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
 
 
@@ -55,6 +57,28 @@ function LoginPage() {
   const handleLogin = (e) => {
 
     e.preventDefault();
+
+    const correctPassword = "password123";
+
+
+
+    if (!userId) {
+
+      alert("Please enter a User ID.");
+
+      return;
+
+    }
+
+
+
+    if (password !== correctPassword) {
+
+      alert("Incorrect password. Please try again or reset your password.");
+
+      return;
+
+    }
 
 
 
@@ -243,6 +267,10 @@ function LoginPage() {
                 type={passwordVisible ? "text" : "password"}
 
                 placeholder="Password"
+
+                value={password}
+
+                onChange={(e) => setPassword(e.target.value)}
 
                 required
 
