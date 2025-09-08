@@ -24,17 +24,57 @@ function App() {
 
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
+
+
+        {/* Role-based routes */}
+
         <Route
 
-          path="/home"
+          path="/operator-home"
 
           element={
 
             <div style={{ textAlign: "center", marginTop: "50px" }}>
 
-              <h1>Welcome Home!</h1>
+              <h1>Operator Dashboard</h1>
 
-              <p>You have successfully logged in to Standard Chartered.</p>
+              <p>Welcome Operator! You can access all pages and user stories.</p>
+
+            </div>
+
+          }
+
+        />
+
+        <Route
+
+          path="/approver-home"
+
+          element={
+
+            <div style={{ textAlign: "center", marginTop: "50px" }}>
+
+              <h1>Approver Dashboard</h1>
+
+              <p>Welcome Approver! You can access the payment approval page.</p>
+
+            </div>
+
+          }
+
+        />
+
+        <Route
+
+          path="/user-home"
+
+          element={
+
+            <div style={{ textAlign: "center", marginTop: "50px" }}>
+
+              <h1>User Dashboard</h1>
+
+              <p>Welcome User! You can view and manage your transactions.</p>
 
             </div>
 
